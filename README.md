@@ -7,6 +7,18 @@
 
 ---
 
+# Using finetuned model
+
+1. create a virutal environment
+2. install using requirements.txt
+3. run run_simple_GUI_demo.py script to launch the gradio UI. 
+
+
+run_simple_GUI_demo.py will download finetuned tts model checkpoint from https://huggingface.co/vinaybabu/finetuned-ToucanTTS and other required files from https://huggingface.co/Flux9665/ToucanTTS
+
+
+
+
 # Text-to-Speech for over 7000 Languages
 
 IMS Toucan is a toolkit for training, using, and teaching state-of-the-art Text-to-Speech Synthesis, developed at the
