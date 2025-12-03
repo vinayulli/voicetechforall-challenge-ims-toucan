@@ -5,6 +5,854 @@ import random
 import xml.etree.ElementTree as ET
 from csv import DictReader
 from pathlib import Path
+from datasets import load_dataset
+
+
+
+
+## IISC SPICOR Dataset 
+
+# Gujarati Language 
+def build_path_to_transcript_iisc_syspin_gujarati_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/gujarati/IISc_SPICOR_Data/IISc_SPICORProject_Gujarati_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/gujarati/IISc_SPICOR_Data/IISc_SPICORProject_Gujarati_Female_Spk001_HC/IISc_SPICORProject_Gujarati_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"AGRICULTURE","CONVERSATIONAL","ENTERTAINMENT","FESTIVAL","FINANCE", "GENERAL","HEALTH","HISTORY","INDIAN CULTURE","POLITICS","RELIGION","SCIENCE AND TECHNOLOGY","SPACE","SPORTS","STORY BOOK","STORIES"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.15))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SPICOR Gujarati Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+def build_path_to_transcript_iisc_syspin_gujarati_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/gujarati/IISc_SPICOR_Data/IISc_SPICORProject_Gujarati_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/gujarati/IISc_SPICOR_Data/IISc_SPICORProject_Gujarati_Male_Spk001_HC/IISc_SPICORProject_Gujarati_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"AGRICULTURE","CONVERSATIONAL","ENTERTAINMENT","FESTIVAL","FINANCE", "GENERAL","HEALTH","HISTORY","INDIAN CULTURE","POLITICS","RELIGION","SCIENCE AND TECHNOLOGY","SPACE","SPORTS","STORY BOOK","STORIES"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.15))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SPICOR Gujarati Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+# Bengali Language
+def build_path_to_transcript_iisc_syspin_bengali_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/bengali/IISc_SYSPIN_Data/IISc_SYSPINProject_Bengali_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/bengali/IISc_SYSPIN_Data/IISc_SYSPINProject_Bengali_Female_Spk001_HC/IISc_SYSPINProject_Bengali_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH", "AGRICULTURE","GENERAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.15))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Bengali Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+def build_path_to_transcript_iisc_syspin_bengali_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/bengali/IISc_SYSPIN_Data/IISc_SYSPINProject_Bengali_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/bengali/IISc_SYSPIN_Data/IISc_SYSPINProject_Bengali_Male_Spk001_HC/IISc_SYSPINProject_Bengali_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH", "AGRICULTURE","GENERAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.15))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Bengali Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+# Bhojpuri Language
+def build_path_to_transcript_iisc_syspin_bhojpuri_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/bhojpuri/IISc_SYSPIN_Data/IISc_SYSPINProject_Bhojpuri_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/bhojpuri/IISc_SYSPIN_Data/IISc_SYSPINProject_Bhojpuri_Female_Spk001_HC/IISc_SYSPINProject_Bhojpuri_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"LOCAL CONVERSATION", "HEALTH","SOCIAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.15))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Bhojpuri Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+def build_path_to_transcript_iisc_syspin_bhojpuri_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/bhojpuri/IISc_SYSPIN_Data/IISc_SYSPINProject_Bhojpuri_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/bhojpuri/IISc_SYSPIN_Data/IISc_SYSPINProject_Bhojpuri_Male_Spk001_HC/IISc_SYSPINProject_Bhojpuri_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"LOCAL CONVERSATION","HEALTH"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Bhojpuri Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+## Chatisgari Language
+def build_path_to_transcript_iisc_syspin_chattisgari_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/chattisgarhi/IISc_SYSPIN_Data/IISc_SYSPINProject_Chhattisgarhi_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/chattisgarhi/IISc_SYSPIN_Data/IISc_SYSPINProject_Chhattisgarhi_Female_Spk001_HC/IISc_SYSPINProject_Chhattisgarhi_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"LOCAL CONVERSATION","HEALTH"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Chattisgari Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+def build_path_to_transcript_iisc_syspin_chattisgari_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/chattisgarhi/IISc_SYSPIN_Data/IISc_SYSPINProject_Chhattisgarhi_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/chattisgarhi/IISc_SYSPIN_Data/IISc_SYSPINProject_Chhattisgarhi_Male_Spk001_HC/IISc_SYSPINProject_Chhattisgarhi_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"LOCAL CONVERSATION","HEALTH"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Chattisgari Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+## Hindi language 
+def build_path_to_transcript_iisc_syspin_hindi_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/hindi/IISc_SYSPIN_Data/IISc_SYSPINProject_Hindi_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/hindi/IISc_SYSPIN_Data/IISc_SYSPINProject_Hindi_Female_Spk001_HC/IISc_SYSPINProject_Hindi_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","GENERAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Hindi Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+def build_path_to_transcript_iisc_syspin_hindi_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/hindi/IISc_SYSPIN_Data/IISc_SYSPINProject_Hindi_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/hindi/IISc_SYSPIN_Data/IISc_SYSPINProject_Hindi_Male_Spk001_HC/IISc_SYSPINProject_Hindi_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","GENERAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Hindi Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+## Kannada Language
+def build_path_to_transcript_iisc_syspin_kannada_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/kannada/IISc_SYSPIN_Data/IISc_SYSPINProject_Kannada_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/kannada/IISc_SYSPIN_Data/IISc_SYSPINProject_Kannada_Female_Spk001_HC/IISc_SYSPINProject_Kannada_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","GENERAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Kannada Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+def build_path_to_transcript_iisc_syspin_kannada_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/kannada/IISc_SYSPIN_Data/IISc_SYSPINProject_Kannada_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/kannada/IISc_SYSPIN_Data/IISc_SYSPINProject_Kannada_Male_Spk001_HC/IISc_SYSPINProject_Kannada_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","AGRICULTURE"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Kannada Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+## Magahi Language
+def build_path_to_transcript_iisc_syspin_magahi_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/magahi/IISc_SYSPIN_Data/IISc_SYSPINProject_Magahi_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/magahi/IISc_SYSPIN_Data/IISc_SYSPINProject_Magahi_Female_Spk001_HC/IISc_SYSPINProject_Magahi_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","SOCIAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Magahi Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+def build_path_to_transcript_iisc_syspin_magahi_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/magahi/IISc_SYSPIN_Data/IISc_SYSPINProject_Magahi_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/magahi/IISc_SYSPIN_Data/IISc_SYSPINProject_Magahi_Male_Spk001_HC/IISc_SYSPINProject_Magahi_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","SOCIAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Magahi Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+## Maithili language 
+
+def build_path_to_transcript_iisc_syspin_maithili_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/maithili/IISc_SYSPIN_Data/IISc_SYSPINProject_Maithili_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/maithili/IISc_SYSPIN_Data/IISc_SYSPINProject_Maithili_Female_Spk001_HC/IISc_SYSPINProject_Maithili_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","LOCAL CONVERSATION"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Maithili Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+def build_path_to_transcript_iisc_syspin_maithili_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/maithili/IISc_SYSPIN_Data/IISc_SYSPINProject_Maithili_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/maithili/IISc_SYSPIN_Data/IISc_SYSPINProject_Maithili_Male_Spk001_HC/IISc_SYSPINProject_Maithili_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","LOCAL CONVERSATION"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Maithili Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+## Marathi language 
+
+def build_path_to_transcript_iisc_syspin_marathi_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/marathi/IISc_SYSPIN_Data/IISc_SYSPINProject_Marathi_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/marathi/IISc_SYSPIN_Data/IISc_SYSPINProject_Marathi_Female_Spk001_HC/IISc_SYSPINProject_Marathi_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","GENERAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Marathi Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+
+def build_path_to_transcript_iisc_syspin_marathi_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/marathi/IISc_SYSPIN_Data/IISc_SYSPINProject_Marathi_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/marathi/IISc_SYSPIN_Data/IISc_SYSPINProject_Marathi_Male_Spk001_HC/IISc_SYSPINProject_Marathi_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","GENERAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Marathi Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+
+## Telugu Language
+
+def build_path_to_transcript_iisc_syspin_telugu_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/telugu/IISc_SYSPIN_Data/IISc_SYSPINProject_Telugu_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/telugu/IISc_SYSPIN_Data/IISc_SYSPINProject_Telugu_Female_Spk001_HC/IISc_SYSPINProject_Telugu_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","GENERAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Telugu Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+
+def build_path_to_transcript_iisc_syspin_telugu_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/telugu/IISc_SYSPIN_Data/IISc_SYSPINProject_Telugu_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/telugu/IISc_SYSPIN_Data/IISc_SYSPINProject_Telugu_Male_Spk001_HC/IISc_SYSPINProject_Telugu_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH","GENERAL"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.05))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN Telugu Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+## English Language
+def build_path_to_transcript_iisc_syspin_english_female(re_cache: bool = True):
+    wav_dir = "/workspace/data/english/IISc_SPICOR_Data/IISc_SPICORProject_English_Female_Spk001_HC/wav"
+    json_path = "/workspace/data/english/IISc_SPICOR_Data/IISc_SPICORProject_English_Female_Spk001_HC/IISc_SPICORProject_English_Female_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH", "FOOD"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.15))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN English Female] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+def build_path_to_transcript_iisc_syspin_english_male(re_cache: bool = True):
+    wav_dir = "/workspace/data/english/IISc_SPICOR_Data/IISc_SPICORProject_English_Male_Spk001_HC/wav"
+    json_path = "/workspace/data/english/IISc_SPICOR_Data/IISc_SPICORProject_English_Male_Spk001_HC/IISc_SPICORProject_English_Male_Spk001_HC_Transcripts.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    transcripts = data["Transcripts"]
+    required_domains = {"HEALTH", "FOOD"}
+    grouped = {}
+    for utt_id, info in transcripts.items():
+        domain = info.get("Domain", "").strip().upper()
+        grouped.setdefault(domain, []).append((utt_id, info))
+
+    final_data = {}
+
+    for domain, items in grouped.items():
+        # Always include required domains
+        if domain in required_domains:
+            selected = items
+        else:
+            # sample 15% for other domains
+            k = max(1, int(len(items) * 0.15))
+            selected = random.sample(items, k)
+
+        for utt_id, info in selected:
+            wav_path = os.path.join(wav_dir, f"{utt_id}.wav")
+
+            # Verify the file exists
+            if not os.path.exists(wav_path):
+                print(f"[WARN] Missing wav file: {wav_path}")
+                continue
+
+            # IMS-Toucan expects full wav path as key
+            final_data[wav_path] = info["Transcript"]
+    print(f"[IISc_SYSPIN English Male] Found {len(final_data)} audio-transcript pairs.")
+    return final_data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # HELPER FUNCTIONS
@@ -2412,6 +3260,117 @@ def build_path_to_transcript_mms_template(lang, root='/resources/speech/corpora/
                 i += 1
 
     return path_to_transcript
+
+
+def build_path_to_transcript_biblemms(
+    language_codes=None,
+    max_samples_per_language=None,
+    seed: int = 1337,
+):
+    """
+    Build a {absolute_audio_path: transcript} dictionary for the BibleMMS dataset.
+
+    This uses the Hugging Face dataset `Flux9665/BibleMMS`, which has the columns:
+        - "audio"         (datasets.Audio)
+        - "transcript"    (str)
+        - "language_code" (ISO-639-3)  # e.g. "eng", "deu", "hin", ...
+
+    Args
+    ----
+    language_codes:
+        Iterable of ISO-639-3 codes to keep (e.g. ["eng"], ["hin"], ["hin", "tel"]).
+        If None, use all languages in the dataset.
+
+    max_samples_per_language:
+        If not None, randomly cap the number of utterances per language
+        at this value. This is *very* useful because BibleMMS is huge
+        (~736k utterances, ~600GB). If None, use all available utterances
+        for the selected languages.
+
+    seed:
+        Random seed used when sampling a subset per language.
+
+    Returns
+    -------
+    dict:
+        Mapping from absolute audio file path (string) to the corresponding
+        transcript (string).
+    """
+    # Load the train split of BibleMMS
+    dataset = load_dataset("Flux9665/BibleMMS", split="train")
+
+    # Optional language filtering
+    if language_codes is not None:
+        language_codes = set(language_codes)
+        dataset = dataset.filter(
+            lambda ex: ex["language_code"] in language_codes
+        )
+
+    path_to_transcript = {}
+
+    # If we don't need per-language caps, just iterate once
+    if max_samples_per_language is None:
+        for example in dataset:
+            audio_info = example["audio"]
+            text = example["transcript"]
+
+            # HF audio column gives us a dict with a "path" key
+            audio_path = audio_info.get("path")
+            if not audio_path:
+                continue
+
+            audio_path = os.path.abspath(audio_path)
+            text = text.strip()
+            if not text:
+                continue
+
+            path_to_transcript[audio_path] = text
+
+        return path_to_transcript
+
+    # With per-language limits: first group indices by language
+    lang_to_indices = {}
+    for idx, lang in enumerate(dataset["language_code"]):
+        if (language_codes is None) or (lang in language_codes):
+            lang_to_indices.setdefault(lang, []).append(idx)
+
+    rng = random.Random(seed)
+    selected_indices = []
+
+    for lang, indices in lang_to_indices.items():
+        if len(indices) > max_samples_per_language:
+            selected_indices.extend(
+                rng.sample(indices, max_samples_per_language)
+            )
+        else:
+            selected_indices.extend(indices)
+
+    # Build dict only for the selected indices
+    for idx in selected_indices:
+        example = dataset[int(idx)]
+        audio_info = example["audio"]
+        text = example["transcript"]
+
+        audio_path = audio_info.get("path")
+        if not audio_path:
+            continue
+
+        audio_path = os.path.abspath(audio_path)
+        text = text.strip()
+        if not text:
+            continue
+
+        path_to_transcript[audio_path] = text
+
+    return path_to_transcript
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
