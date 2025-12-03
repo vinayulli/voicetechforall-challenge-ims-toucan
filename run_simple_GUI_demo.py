@@ -26,7 +26,7 @@ class TTSWebUI:
 
         self.controllable_ui = ControllableInterface(gpu_id=gpu_id,
                                                      available_artificial_voices=available_artificial_voices,
-                                                     tts_model_path=tts_model_path,
+                                                     tts_model_path="/workspace/IMS-Toucan/Models/ToucanTTS_SYSPIN_Challenge/best.pt",
                                                      vocoder_model_path=vocoder_model_path,
                                                      embedding_gan_path=embedding_gan_path)
         self.iface = gr.Interface(fn=self.read,

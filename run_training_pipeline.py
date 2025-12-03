@@ -18,13 +18,16 @@ from Recipes.ToucanTTS_Massive_stage1 import run as stage1
 from Recipes.ToucanTTS_Massive_stage2 import run as stage2
 from Recipes.ToucanTTS_Massive_stage3 import run as stage3
 from Recipes.ToucanTTS_Nancy import run as nancy
-from Recipes.finetuning_example_multilingual import run as fine_tuning_example_multilingual
-from Recipes.finetuning_example_simple import run as fine_tuning_example_simple
+from Recipes.finetuning_example_multilingual import run as finetuning_example_multilingual
+from Recipes.finetuning_example_simple import run as finetuning_example_simple
+from Recipes.finetuning_example_multilingual_syspin_challenge import run as finetuning_example_multilingual_syspin_challenge
+
 
 pipeline_dict = {
     # the finetuning examples
-    "finetuning_example_simple"      : fine_tuning_example_simple,
-    "finetuning_example_multilingual": fine_tuning_example_multilingual,
+    "finetuning_example_simple"      : finetuning_example_simple,
+    "finetuning_example_multilingual": finetuning_example_multilingual,
+    "finetuning_example_multilingual_syspin_challenge": finetuning_example_multilingual_syspin_challenge,
     # integration test
     "tt_it"                          : tt_integration_test,
     # regular ToucanTTS pipelines
