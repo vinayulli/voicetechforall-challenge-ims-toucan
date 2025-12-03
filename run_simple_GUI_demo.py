@@ -23,10 +23,10 @@ class TTSWebUI:
         iso_to_name = load_json_from_path(path_to_iso_list)
         text_selection = [f"{iso_to_name[iso_code]} ({iso_code})" for iso_code in iso_to_name]
         # accent_selection = [f"{iso_to_name[iso_code]} Accent ({iso_code})" for iso_code in iso_to_name]
-
+        tts_model_path = hf_hub_download(cache_dir=MODEL_DIR, repo_id = "vinaybabu/finetuned-ToucanTTS", filename="finetuned_chkpoint_50000.pt")
         self.controllable_ui = ControllableInterface(gpu_id=gpu_id,
                                                      available_artificial_voices=available_artificial_voices,
-                                                     tts_model_path="/workspace/IMS-Toucan/Models/ToucanTTS_SYSPIN_Challenge/best.pt",
+                                                     tts_model_path=tts_model_path,
                                                      vocoder_model_path=vocoder_model_path,
                                                      embedding_gan_path=embedding_gan_path)
         self.iface = gr.Interface(fn=self.read,
