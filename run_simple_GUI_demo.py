@@ -52,8 +52,8 @@ class TTSWebUI:
                                   title=title,
                                   allow_flagging="never",
                                   article=article,
-                                  theme=gr.themes.Ocean(primary_hue="amber", secondary_hue="orange"))
-        self.iface.launch()
+                                  theme=gr.themes.Soft(primary_hue="amber", secondary_hue="orange"))
+        self.iface.launch(share=True)
 
     def read(self,
              prompt,
